@@ -28,7 +28,7 @@ APP WINDOW
 """
 bg_colour = 50, 50, 50
 window_height = 620
-window_width = 620
+window_width = 720
 WIN = pygame.display.set_mode((window_width, window_height))
 WIN.fill(bg_colour)
 
@@ -36,12 +36,18 @@ WIN.fill(bg_colour)
 VARIABLES
 """
 border_colour = 0, 0, 0
+border_thickness = 10
+border_particles = ["(0, 610)", "(10, 610)", "(20, 610)", "(30, 610)", "(40, 610)", "(50, 610)", "(60, 610)", "(70, 610)", "(80, 610)", "(90, 610)", "(100, 610)", "(110, 610)", "(120, 610)", "(130, 610)", "(140, 610)", "(150, 610)", "(160, 610)", "(170, 610)", "(180, 610)", "(190, 610)", "(200, 610)"]
 
 def border():
-    pygame.draw.rect(WIN, border_colour, (0, 0, 10, 620))
-    pygame.draw.rect(WIN, border_colour, (0, 0, 620, 10))
-    pygame.draw.rect(WIN, border_colour, (610, 0, 10, 620))
-    pygame.draw.rect(WIN, border_colour, (0, 610, 620, 10))
+    # Left border
+    pygame.draw.rect(WIN, border_colour, (0, 0, border_thickness, window_height))
+    # Top border
+    pygame.draw.rect(WIN, border_colour, (0, 0, window_width - 110, border_thickness))
+    # Right border
+    pygame.draw.rect(WIN, border_colour, (window_width - 110, 0, border_thickness, window_height))
+    # Bottom border
+    pygame.draw.rect(WIN, border_colour, (0, window_height - 10, window_width - 110, border_thickness))
 
 particle_size_x = 10
 particle_size_y = particle_size_x
@@ -50,8 +56,9 @@ sand_colour = (237, 201, 175)
 
 def draw_sand_particles():
     if mouse_key_state[0]:
-        pygame.draw.rect(WIN, sand_colour, (new_particle_pos_x, new_particle_pos_y, particle_size_x, particle_size_y))
+        # pygame.time.wait(80)
         info_append = f"({new_particle_pos_x}, {new_particle_pos_y})0"
+        pygame.draw.rect(WIN, sand_colour, (new_particle_pos_x, new_particle_pos_y, particle_size_x, particle_size_y))
         old_sand_particles.append(info_append)
 
 def get_keys_mouse():
@@ -67,38 +74,58 @@ def get_keys_mouse():
     new_particle_pos_x = round(mouse_pos[0] / 10) * 10
     new_particle_pos_y = round(mouse_pos[1] / 10) * 10
 
+def mouse_cursor():
+    mouse_pos = pygame.mouse.get_pos()
+    pygame.draw.rect(WIN, (255, 255, 255), (round(mouse_pos[0] / 10) * 10 - 10, round(mouse_pos[1] / 10) * 10, particle_size_x, particle_size_y))
+    pygame.draw.rect(WIN, (255, 255, 255), (round(mouse_pos[0] / 10) * 10 + 10, round(mouse_pos[1] / 10) * 10, particle_size_x, particle_size_y))
+    pygame.draw.rect(WIN, (255, 255, 255), (round(mouse_pos[0] / 10) * 10, round(mouse_pos[1] / 10) * 10 - 10, particle_size_x, particle_size_y))
+    pygame.draw.rect(WIN, (255, 255, 255), (round(mouse_pos[0] / 10) * 10, round(mouse_pos[1] / 10) * 10 + 10, particle_size_x, particle_size_y))
+
 old_sand_particles = []
 new_sand_particles = []
 max_sand_speed = 30
+sand_speed = 5
 
 def sand_physics():
     print(f"Number of particles: {len(old_sand_particles)}")
     pygame.Surface.fill(WIN, bg_colour)
-    for particle in old_sand_particles:
-        particle_info = particle.split(")")
-        particle_time = int(particle_info[1])
-        new_particle_time = particle_time + 1
-        sand_speed = round(int((0.5 * new_particle_time) ** 2) / 10) * 10
-        if sand_speed > max_sand_speed:
-            sand_speed = max_sand_speed
-        particle_pos = particle_info[0].split("(")
-        particle_pos = particle_pos[1].split(", ")
-        particle_pos_x = float(particle_pos[0])
-        particle_pos_y = int(particle_pos[1])
-        particle_pos_y = particle_pos_y + sand_speed
-
-        if particle_pos_x > 0 and particle_pos_x < window_width and particle_pos_y > 0 and particle_pos_y < window_width:
-            pygame.draw.rect(WIN, sand_colour, (particle_pos_x, particle_pos_y, particle_size_x, particle_size_y))
-            new_info_append = f"({particle_pos_x}, {particle_pos_y}){new_particle_time}"
-            new_sand_particles.append(new_info_append)
+    row = window_height - border_thickness - 10
+    column = 10
+    while row != 0:
+        while column != 610:
+            particle = 0
+            while particle != len(old_sand_particles):
+                
     reset_sand_particles()
 
 def reset_sand_particles():
     old_sand_particles.clear()
     index = 0
     while index != len(new_sand_particles):
+        count = 1
+        while count != len(new_sand_particles):
+            index_particle_pos = new_sand_particles[index].split(")")
+            index_particle_pos = index_particle_pos[0]
+            count_particle_pos = new_sand_particles[count].split(")")
+            count_particle_pos = count_particle_pos[0]
+            if index_particle_pos == count_particle_pos:
+                new_sand_particles.pop(count)
+                count = 1
+            else:
+                count = count + 1
         old_sand_particles.append(new_sand_particles[index])
         new_sand_particles.pop(0)
+
+"""
+DEBUGGING BLOCKS
+"""
+info_append = "(200, 50)0"
+pygame.draw.rect(WIN, sand_colour, (200, 50, particle_size_x, particle_size_y))
+old_sand_particles.append(info_append)
+
+info_append = "(200, 100)0"
+pygame.draw.rect(WIN, sand_colour, (200, 100, particle_size_x, particle_size_y))
+old_sand_particles.append(info_append)
 
 """
 SETS FPS
@@ -117,6 +144,7 @@ while RUNNING_WINDOW == True:
     sand_physics()
     border()
     draw_sand_particles()
+    mouse_cursor()
 
     pygame.display.update()
 
