@@ -90,12 +90,58 @@ def sand_physics():
     print(f"Number of particles: {len(old_sand_particles)}")
     pygame.Surface.fill(WIN, bg_colour)
     row = window_height - border_thickness - 10
-    column = 10
     while row != 0:
+        column = border_thickness
         while column != 610:
             particle = 0
             while particle != len(old_sand_particles):
-                
+                current_particle_info = old_sand_particles[particle]
+                current_particle_info = current_particle_info.split(")")
+                old_current_particle_time = int(current_particle_info[1])
+                new_current_particle_time = old_current_particle_time + 1
+                sand_speed = round(int((0.5 * new_current_particle_time) ** 2) / 10) * 10
+                if sand_speed > max_sand_speed:
+                    sand_speed = max_sand_speed
+                current_particle_info = current_particle_info[0]
+                current_particle_info = current_particle_info.split("(")
+                current_particle_info = current_particle_info[1]
+                current_particle_info = current_particle_info.split(", ")
+                current_particle_pos_x = int(current_particle_info[0])
+                old_current_particle_pos_y = int(current_particle_info[1])
+                new_current_particle_pos_y = old_current_particle_pos_y + sand_speed
+                if current_particle_pos_x == column and new_current_particle_pos_y == row:
+                    # print("Found matching particle position!")
+                    particle_check = 0
+                    while particle_check != len(old_sand_particles) - 1:
+                        if particle_check == particle:
+                            particle_check = particle_check + 1
+                        elif particle_check + 1 >= len(old_sand_particles):
+                            particle_check = len(old_sand_particles) - 1
+                            return
+                        under_particle_info = old_sand_particles[particle_check]
+                        under_particle_info = under_particle_info.split(")")
+                        under_particle_info = under_particle_info[0]
+                        under_particle_info = under_particle_info.split("(")
+                        under_particle_info = under_particle_info[1]
+                        under_particle_info = under_particle_info.split(", ")
+                        under_particle_pos_x = int(under_particle_info[0])
+                        under_particle_pos_y = int(under_particle_info[1])
+                        if under_particle_pos_y == new_current_particle_pos_y:
+                            new_current_particle_pos_y = under_particle_pos_y - 10
+                            new_current_particle_time = 0
+                            particle_check = 0
+                            if particle_check == particle:
+                                particle_check = particle_check + 1
+                        else:
+                            particle_check = particle_check + 1
+                    pygame.draw.rect(WIN, sand_colour, (current_particle_pos_x, new_current_particle_pos_y, particle_size_x, particle_size_y))
+                    new_info_append = f"({current_particle_pos_x}, {new_current_particle_pos_y}){new_current_particle_time}"
+                    new_sand_particles.append(new_info_append)
+                    particle = len(old_sand_particles)
+                else:
+                    particle = particle + 1
+            column = column + 10
+        row = row - 10
     reset_sand_particles()
 
 def reset_sand_particles():
@@ -125,6 +171,10 @@ old_sand_particles.append(info_append)
 
 info_append = "(200, 100)0"
 pygame.draw.rect(WIN, sand_colour, (200, 100, particle_size_x, particle_size_y))
+old_sand_particles.append(info_append)
+
+info_append = "(300, 90)0"
+pygame.draw.rect(WIN, sand_colour, (300, 90, particle_size_x, particle_size_y))
 old_sand_particles.append(info_append)
 
 """
