@@ -1,3 +1,6 @@
+import math
+
+
 particle_speed = 5
 
 old_sand_particles = []
@@ -35,3 +38,10 @@ old_sand_particles[0].updateParticle()
 
 print(old_sand_particles[0].y)
 print(old_sand_particles[0].time)
+
+print("\n\n\n\n\n\n\n\n\n")
+
+n = 193
+print(round(n / 10) * 10)
+
+print((n // 10) * 10)

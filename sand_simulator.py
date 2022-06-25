@@ -7,18 +7,7 @@ Latest Release - https://github.com/WhenLifeHandsYouLemons/Particle-Simulator/re
 """
 
 # IMPORTS
-import os
-import sys
 import pygame
-
-# FILE SEARCHING USED IN '.exe' FORMAT
-def get_true_filename(filename):
-    try:
-        base = sys._MEIPASS
-    except Exception:
-        base = os.path.abspath('.')
-    return os.path.join(base, filename)
-
 
 # APP WINDOW
 bg_colour = 50, 50, 50
@@ -32,16 +21,6 @@ WIN.fill(bg_colour)
 border_colour = 0, 0, 0
 border_thickness = 10
 border_particles = ["(0, 610)", "(10, 610)", "(20, 610)", "(30, 610)", "(40, 610)", "(50, 610)", "(60, 610)", "(70, 610)", "(80, 610)", "(90, 610)", "(100, 610)", "(110, 610)", "(120, 610)", "(130, 610)", "(140, 610)", "(150, 610)", "(160, 610)", "(170, 610)", "(180, 610)", "(190, 610)", "(200, 610)"]
-
-def border():
-    # Left border
-    pygame.draw.rect(WIN, border_colour, (0, 0, border_thickness, window_height))
-    # Top border
-    pygame.draw.rect(WIN, border_colour, (0, 0, window_width - 110, border_thickness))
-    # Right border
-    pygame.draw.rect(WIN, border_colour, (window_width - 110, 0, border_thickness, window_height))
-    # Bottom border
-    pygame.draw.rect(WIN, border_colour, (0, window_height - 10, window_width - 110, border_thickness))
 
 particle_size_x = 10
 particle_size_y = particle_size_x
@@ -67,13 +46,6 @@ def get_keys_mouse():
     new_particle_pos_x = mouse_pos[0]
     new_particle_pos_x = round(mouse_pos[0] / 10) * 10
     new_particle_pos_y = round(mouse_pos[1] / 10) * 10
-
-def mouse_cursor():
-    mouse_pos = pygame.mouse.get_pos()
-    pygame.draw.rect(WIN, (255, 255, 255), (round(mouse_pos[0] / 10) * 10 - 10, round(mouse_pos[1] / 10) * 10, particle_size_x, particle_size_y))
-    pygame.draw.rect(WIN, (255, 255, 255), (round(mouse_pos[0] / 10) * 10 + 10, round(mouse_pos[1] / 10) * 10, particle_size_x, particle_size_y))
-    pygame.draw.rect(WIN, (255, 255, 255), (round(mouse_pos[0] / 10) * 10, round(mouse_pos[1] / 10) * 10 - 10, particle_size_x, particle_size_y))
-    pygame.draw.rect(WIN, (255, 255, 255), (round(mouse_pos[0] / 10) * 10, round(mouse_pos[1] / 10) * 10 + 10, particle_size_x, particle_size_y))
 
 old_sand_particles = []
 new_sand_particles = []
@@ -104,30 +76,6 @@ def sand_physics():
                 old_current_particle_pos_y = int(current_particle_info[1])
                 new_current_particle_pos_y = old_current_particle_pos_y + sand_speed
                 if current_particle_pos_x == column and new_current_particle_pos_y == row:
-                    # print("Found matching particle position!")
-                    particle_check = 0
-                    while particle_check != len(old_sand_particles) - 1:
-                        if particle_check == particle:
-                            particle_check = particle_check + 1
-                        elif particle_check + 1 >= len(old_sand_particles):
-                            particle_check = len(old_sand_particles) - 1
-                            return
-                        under_particle_info = old_sand_particles[particle_check]
-                        under_particle_info = under_particle_info.split(")")
-                        under_particle_info = under_particle_info[0]
-                        under_particle_info = under_particle_info.split("(")
-                        under_particle_info = under_particle_info[1]
-                        under_particle_info = under_particle_info.split(", ")
-                        under_particle_pos_x = int(under_particle_info[0])
-                        under_particle_pos_y = int(under_particle_info[1])
-                        if under_particle_pos_y == new_current_particle_pos_y:
-                            new_current_particle_pos_y = under_particle_pos_y - 10
-                            new_current_particle_time = 0
-                            particle_check = 0
-                            if particle_check == particle:
-                                particle_check = particle_check + 1
-                        else:
-                            particle_check = particle_check + 1
                     pygame.draw.rect(WIN, sand_colour, (current_particle_pos_x, new_current_particle_pos_y, particle_size_x, particle_size_y))
                     new_info_append = f"({current_particle_pos_x}, {new_current_particle_pos_y}){new_current_particle_time}"
                     new_sand_particles.append(new_info_append)
@@ -159,17 +107,6 @@ def reset_sand_particles():
 """
 DEBUGGING BLOCKS
 """
-info_append = "(200, 50)0"
-pygame.draw.rect(WIN, sand_colour, (200, 50, particle_size_x, particle_size_y))
-old_sand_particles.append(info_append)
-
-info_append = "(200, 100)0"
-pygame.draw.rect(WIN, sand_colour, (200, 100, particle_size_x, particle_size_y))
-old_sand_particles.append(info_append)
-
-info_append = "(300, 90)0"
-pygame.draw.rect(WIN, sand_colour, (300, 90, particle_size_x, particle_size_y))
-old_sand_particles.append(info_append)
 
 """
 SETS FPS
@@ -186,9 +123,7 @@ while RUNNING_WINDOW == True:
 
     get_keys_mouse()
     sand_physics()
-    border()
     draw_sand_particles()
-    mouse_cursor()
 
     pygame.display.update()
 
@@ -197,6 +132,4 @@ while RUNNING_WINDOW == True:
             RUNNING_WINDOW = False
             pygame.quit()
 
-
-
-sys.exit()
+pygame.quit()
