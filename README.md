@@ -1,21 +1,33 @@
 # Particle Simulator
 
-A 2D water and sand particle simulator.
+## About
+
+A 2D water and sand (for now) particle simulator. It makes use of pygame to draw on the screen.
+
+## File Directory
+
+`sandSimulator.py` - This is the simulator for sand only
+
+`waterSimulator.py` - This is the simulator for water only
+
+`particleSimulator.py` - This is the combined simulator that includes everything
 
 ## To-Do List
 
-- [ ] Draw game border
 - [ ] Sand simulator
-  - [ ] Draw sand particles
+  - [x] Draw sand particles
   - [x] Create sand particles on click
-  - [ ] Update sand particles
-  - [ ] Implement sand gravity
-  - [ ] Implement collision checks
-  - [ ] Implement duplicate check
+  - [x] Update sand particles
+  - [ ] Collision checks
+    - [x] With sand
+    - [ ] With water
+  - [ ] Duplicate check
+
 - [ ] Water simulator
-  - [ ] Draw water particles
-  - [ ] Create water particles on click
-  - [ ] Update water particles
-  - [ ] Implement water gravity
-  - [ ] Implement collision checks
-  - [ ] Implement duplicate check
+  - [x] Draw water particles
+  - [x] Create water particles on click
+  - [x] Update water particles
+  - [ ] Collision checks
+    - [ ] With water
+    - [ ] With sand
+  - [ ] Duplicate check

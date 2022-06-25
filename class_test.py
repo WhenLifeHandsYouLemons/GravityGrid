@@ -1,6 +1,3 @@
-import math
-
-
 particle_speed = 5
 
 old_sand_particles = []
