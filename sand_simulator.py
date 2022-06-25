@@ -6,16 +6,12 @@ Instagram - https://www.instagram.com/whenlifehandsyoulemons1/
 Latest Release - https://github.com/WhenLifeHandsYouLemons/Particle-Simulator/releases
 """
 
-"""
-IMPORTS
-"""
+# IMPORTS
 import os
 import sys
 import pygame
 
-"""
-FILE SEARCHING USED IN '.exe' FORMAT
-"""
+# FILE SEARCHING USED IN '.exe' FORMAT
 def get_true_filename(filename):
     try:
         base = sys._MEIPASS
@@ -23,18 +19,16 @@ def get_true_filename(filename):
         base = os.path.abspath('.')
     return os.path.join(base, filename)
 
-"""
-APP WINDOW
-"""
+
+# APP WINDOW
 bg_colour = 50, 50, 50
 window_height = 620
 window_width = 720
 WIN = pygame.display.set_mode((window_width, window_height))
 WIN.fill(bg_colour)
 
-"""
-VARIABLES
-"""
+
+# VARIABLES
 border_colour = 0, 0, 0
 border_thickness = 10
 border_particles = ["(0, 610)", "(10, 610)", "(20, 610)", "(30, 610)", "(40, 610)", "(50, 610)", "(60, 610)", "(70, 610)", "(80, 610)", "(90, 610)", "(100, 610)", "(110, 610)", "(120, 610)", "(130, 610)", "(140, 610)", "(150, 610)", "(160, 610)", "(170, 610)", "(180, 610)", "(190, 610)", "(200, 610)"]
