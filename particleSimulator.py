@@ -1,11 +1,3 @@
-"""
-Made by - Sooraj.S
-GitHub - https://github.com/WhenLifeHandsYouLemons
-Twitter - https://twitter.com/LemonsHandYou
-Instagram - https://www.instagram.com/whenlifehandsyoulemons1/
-Latest Release - https://github.com/WhenLifeHandsYouLemons/Particle-Simulator/releases
-"""
-
 # IMPORTS
 import random
 import pygame
