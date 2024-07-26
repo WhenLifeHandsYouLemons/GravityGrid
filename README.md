@@ -21,12 +21,12 @@ A 2D water and sand (for now) particle simulator. It makes use of pygame to draw
   - [ ] Collision checks
     - [x] With sand
     - [ ] With water
-  - [ ] Duplicate check
+  - [x] Duplicate check
 
 - [ ] Water simulator
-  - [x] Draw water particles
-  - [x] Create water particles on click
-  - [x] Update water particles
+  - [ ] Draw water particles
+  - [ ] Create water particles on click
+  - [ ] Update water particles
   - [ ] Collision checks
     - [ ] With water
     - [ ] With sand

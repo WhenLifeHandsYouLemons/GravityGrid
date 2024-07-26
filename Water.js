@@ -1,0 +1,1 @@
+const waterColorLight = [100, 100, 255];
