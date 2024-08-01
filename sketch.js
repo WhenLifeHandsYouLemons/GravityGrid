@@ -1,16 +1,17 @@
 // Canvas variables
-const gridSize = 20;
+const gridSize = 25;
 const backgroundColor = [240, 240, 240];
 let canvasWidth, canvasHeight, gridHeight, gridWidth;
 let brushSize = 2;
 
 let grid = [];
-let particleType = 1;   // 1 for sand, 2 for water, 3 for wall, etc.
+let particleType = 0;   // 1 for sand, 2 for water, 3 for wall, 0 for destroying particles
 const particleSpeed = 1;
+let particleCount = 0;
 
 function setup() {
     canvasWidth = floor(windowWidth / gridSize) * gridSize;
-    canvasHeight = floor(windowHeight / gridSize) * gridSize;
+    canvasHeight = (floor(windowHeight / gridSize) * gridSize);
 
     createCanvas(canvasWidth, canvasHeight);
     background(backgroundColor);
@@ -27,9 +28,12 @@ function setup() {
         }
     }
 
-    spawnRandomParticles(100);
+    particleType = 2;
+    spawnRandomParticles(1);
+    particleType = 0;
 
     frameRate(60);
+    createInput();
 }
 
 function draw() {
@@ -52,7 +56,7 @@ function draw() {
 
         if (gridY < grid.length && gridX < grid[0].length && gridY >= 0 && gridX >= 0) {
             if (particleType == 0) {
-                removeParticles(gridX, gridY, 2)
+                removeParticles(gridX, gridY, brushSize)
             }
             else if (grid[gridY][gridX] == 0) {
                 if (particleType == 1) {
@@ -68,6 +72,20 @@ function draw() {
 
         }
     }
+
+    // Draw UI
+    fill(0, 0, 0);
+    stroke(0, 0, 0);
+    textFont('Arial');
+    textSize(20);
+
+    textAlign(LEFT);
+    text("GravityGrid", 10, 30);
+
+    textAlign(RIGHT);
+    text("Particle type: " + particleType, canvasWidth-10, 30);
+    text("Total particle count: " + particleCount, canvasWidth-10, 60);
+    text("Eraser size: " + brushSize, canvasWidth-10, 90);
 }
 
 function keyPressed() {
@@ -83,6 +101,40 @@ function keyPressed() {
     else if (key == '3') {
         particleType = 3;
     }
+    else if (key == 'k') {
+        if (isLooping()) {
+            noLoop();
+        }
+        else {
+            loop();
+        }
+    }
+    else if (key == 'l') {
+        noLoop();
+        draw();
+    }
+    else if (key == 'c') {
+        grid = [];
+        for (let i = 0; i < gridHeight; i++) {
+            grid.push([]);
+
+            for (let j = 0; j < gridWidth; j++) {
+                grid[i].push(0);
+            }
+        }
+    }
+    else if (key == '=') {
+        brushSize++;
+        if (brushSize > 10) {
+            brushSize = 10;
+        }
+    }
+    else if (key == '-') {
+        brushSize--;
+        if (brushSize < 1) {
+            brushSize = 1;
+        }
+    }
 }
 
 function updateParticles() {
@@ -96,10 +148,12 @@ function updateParticles() {
 }
 
 function drawParticles() {
+    particleCount = 0;
     for (let i = 0; i < grid.length; i++) {
         for (let j = 0; j < grid[i].length; j++) {
             if (grid[i][j] != 0) {
                 grid[i][j].draw();
+                particleCount++;
             }
         }
     }
@@ -126,6 +180,7 @@ function removeParticles(x, y, radius) {
     try {
         grid[y][x] = 0;
     } catch {}
+
     for (i = 0; i < radius; i++) {
         try {
             grid[y][x+i] = 0;

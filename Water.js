@@ -10,6 +10,7 @@ class Water {
         this.updated = false;
         this.color = waterColorBright;
         this.direction = 0;     // 0 = none, 1 = left, 2 = right
+        this.reachedBottom = false;
     }
 
     update() {
@@ -23,6 +24,7 @@ class Water {
     }
 
     moveParticle() {
+        // console.log(this.direction);
         this.particleSpeed = particleSpeed;
 
         if (this.particleSpeed > 0) {
@@ -41,7 +43,7 @@ class Water {
                 this.particlePos[1] += this.particleSpeed;
             }
             // See if it can go down right
-            else if (this.particlePos[0] + 1 < grid[0].length && grid[this.particlePos[1] + this.particleSpeed][this.particlePos[0] + 1] == 0) {
+            else if (this.particlePos[0] + 1 < grid[0].length && this.particlePos[1] + this.particleSpeed < grid.length - 1 && grid[this.particlePos[1] + this.particleSpeed][this.particlePos[0] + 1] == 0) {
                 grid[this.particlePos[1] + this.particleSpeed][this.particlePos[0] + 1] = this;
                 grid[this.particlePos[1]][this.particlePos[0]] = 0;
 
@@ -49,7 +51,7 @@ class Water {
                 this.particlePos[0]++;
             }
             // See if it can go down left
-            else if (this.particlePos[0] - 1 >= 0 && grid[this.particlePos[1] + this.particleSpeed][this.particlePos[0] - 1] == 0) {
+            else if (this.particlePos[0] - 1 >= 0 && this.particlePos[1] + this.particleSpeed < grid.length - 1 && grid[this.particlePos[1] + this.particleSpeed][this.particlePos[0] - 1] == 0) {
                 grid[this.particlePos[1] + this.particleSpeed][this.particlePos[0] - 1] = this;
                 grid[this.particlePos[1]][this.particlePos[0]] = 0;
 
@@ -75,7 +77,7 @@ class Water {
                 this.direction = 2;
             }
             // See if there's a sand particle above it
-            else if (this.particlePos[1] - 1 >= 0 && grid[this.particlePos[1] - 1][this.particlePos[0]] instanceof Sand) {
+            else if (grid[this.particlePos[1] - 1][this.particlePos[0]] instanceof Sand) {
                 grid[this.particlePos[1] - 1][this.particlePos[0]] = this;
                 grid[this.particlePos[1]][this.particlePos[0]] = new Sand(this.particlePos[0], this.particlePos[1]);
 
