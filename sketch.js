@@ -5,7 +5,7 @@ let canvasWidth, canvasHeight, gridHeight, gridWidth;
 let brushSize = 2;
 
 let grid = [];
-let particleType = 0;   // 1 for sand, 2 for water, 3 for wall, etc.
+let particleType = 1;   // 1 for sand, 2 for water, 3 for wall, etc.
 const particleSpeed = 1;
 
 function setup() {
@@ -58,8 +58,11 @@ function draw() {
                 if (particleType == 1) {
                     grid[gridY][gridX] = new Sand(gridX, gridY);
                 }
-                if (particleType == 2) {
+                else if (particleType == 2) {
                     grid[gridY][gridX] = new Water(gridX, gridY);
+                }
+                else if (particleType == 3) {
+                    grid[gridY][gridX] = new Wall(gridX, gridY);
                 }
             }
 
@@ -76,6 +79,9 @@ function keyPressed() {
     }
     else if (key == '2') {
         particleType = 2;
+    }
+    else if (key == '3') {
+        particleType = 3;
     }
 }
 

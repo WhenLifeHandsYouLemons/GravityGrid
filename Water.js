@@ -74,6 +74,13 @@ class Water {
 
                 this.direction = 2;
             }
+            // See if there's a sand particle above it
+            else if (this.particlePos[1] - 1 >= 0 && grid[this.particlePos[1] - 1][this.particlePos[0]] instanceof Sand) {
+                grid[this.particlePos[1] - 1][this.particlePos[0]] = this;
+                grid[this.particlePos[1]][this.particlePos[0]] = new Sand(this.particlePos[0], this.particlePos[1]);
+
+                this.particlePos[1]--;
+            }
             else {
                 this.particleSpeed = 0;
                 this.direction = 0;
