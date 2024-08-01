@@ -1,7 +1,6 @@
-const colorShift = 0.25;
+const sandColorShift = 0.25;
 const sandColorBright = [194, 178, 128];
 const sandColorDark = [80, 64, 14];
-const particleSpeed = 1;
 
 class Sand {
     constructor(x, y) {
@@ -64,17 +63,17 @@ class Sand {
     changeColor() {
         if (this.particleSpeed == 0) {
             if (this.color[0] > sandColorDark[0] && this.color[1] > sandColorDark[1] && this.color[2] > sandColorDark[2]) {
-                this.color = [this.color[0] - colorShift, this.color[1] - colorShift, this.color[2] - colorShift];
+                this.color = [this.color[0] - sandColorShift, this.color[1] - sandColorShift, this.color[2] - sandColorShift];
             }
         }
         else {
             if (this.color[0] < sandColorBright[0] && this.color[1] < sandColorBright[1] && this.color[2] < sandColorBright[2]) {
-                this.color = [this.color[0] + (colorShift * 10), this.color[1] + (colorShift * 10), this.color[2] + (colorShift * 10)];
+                this.color = [this.color[0] + (sandColorShift * 10), this.color[1] + (sandColorShift * 10), this.color[2] + (sandColorShift * 10)];
             }
         }
     }
 
-    show() {
+    draw() {
         fill(this.color);
         stroke(this.color);
         rect(convertGridToPixels(this.particlePos[0]), convertGridToPixels(this.particlePos[1]), gridSize, gridSize);

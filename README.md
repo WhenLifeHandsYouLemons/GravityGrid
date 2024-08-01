@@ -1,33 +1,35 @@
-# Particle Simulator
+# GravityGrid
 
 ## About
 
-A 2D water and sand (for now) particle simulator. It makes use of pygame to draw on the screen.
+A 2D grid-based sand and water particle simulator.
 
 ## File Directory
 
-`sandSimulator.py` - This is the simulator for sand only
+`sketch.js` - The main file where the screen is draw and the game loop exists
 
-`waterSimulator.py` - This is the simulator for water only
+`Sand.js` - The class for the sand particles (includes the update and draw functions)
 
-`particleSimulator.py` - This is the combined simulator that includes everything
+`Water.js` - The class for the water particles (includes the update and draw functions)
 
-## To-Do List
 
-- [ ] Sand simulator
+## Features List
+
+- [ ] Sand particles
   - [x] Draw sand particles
   - [x] Create sand particles on click
   - [x] Update sand particles
   - [ ] Collision checks
     - [x] With sand
-    - [ ] With water
+    - [x] With water
   - [x] Duplicate check
 
-- [ ] Water simulator
-  - [ ] Draw water particles
-  - [ ] Create water particles on click
-  - [ ] Update water particles
+- [ ] Water particles
+  - [x] Draw water particles
+  - [x] Create water particles on click
+  - [x] Update water particles
   - [ ] Collision checks
-    - [ ] With water
-    - [ ] With sand
-  - [ ] Duplicate check
+    - [x] With water
+    - [x] With sand
+  - [x] Duplicate check
+
