@@ -3,12 +3,13 @@ const sandColorBright = [194, 178, 128];
 const sandColorDark = [80, 64, 14];
 
 class Sand {
-    constructor(x, y) {
+    constructor(x, y, speed=1, age=0, update=false, color=sandColorBright) {
+        this.type = 'sand';
         this.particlePos = [x, y];
-        this.particleSpeed = 1;
-        this.particleAge = 0;
-        this.updated = false;
-        this.color = sandColorBright;
+        this.particleSpeed = speed;
+        this.particleAge = age;
+        this.updated = update;
+        this.color = color;
     }
 
     update() {

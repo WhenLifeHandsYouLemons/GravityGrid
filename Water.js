@@ -3,14 +3,15 @@ const waterColorBright = [100, 100, 255];
 const waterColorDark = [50, 50, 145];
 
 class Water {
-    constructor(x, y) {
+    constructor(x, y, speed=1, age=0, update=false, color=waterColorBright, direction=0, reachedBottom=false) {
+        this.type = 'water';
         this.particlePos = [x, y];
-        this.particleSpeed = 1;
-        this.particleAge = 0;
-        this.updated = false;
-        this.color = waterColorBright;
-        this.direction = 0;     // 0 = none, 1 = left, 2 = right
-        this.reachedBottom = false;
+        this.particleSpeed = speed;
+        this.particleAge = age;
+        this.updated = update;
+        this.color = color;
+        this.direction = direction;     // 0 = none, 1 = left, 2 = right
+        this.reachedBottom = reachedBottom;
     }
 
     update() {

@@ -2,8 +2,8 @@ const wallColor = [127, 127, 127];
 
 class Wall {
     constructor(x, y) {
+        this.type = 'wall';
         this.particlePos = [x, y];
-        this.color = wallColor;
     }
 
     update() {

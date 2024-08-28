@@ -2,12 +2,19 @@
 const gridSize = 25;
 const backgroundColor = [240, 240, 240];
 let canvasWidth, canvasHeight, gridHeight, gridWidth;
-let brushSize = 2;
+let brushSize = 1;
 
 let grid = [];
-let particleType = 0;   // 1 for sand, 2 for water, 3 for wall, 0 for destroying particles
+let particleTypes = {
+    1: "Sand",
+    2: "Water",
+    3: "Wall",
+    0: "Eraser"
+};
+let particleType = 1;   // 1 for sand, 2 for water, 3 for wall, 0 for destroying particles
 const particleSpeed = 1;
 let particleCount = 0;
+let raining = false;
 
 function setup() {
     canvasWidth = floor(windowWidth / gridSize) * gridSize;
@@ -20,20 +27,11 @@ function setup() {
     gridHeight = floor(windowHeight / gridSize);
     gridWidth = floor(windowWidth / gridSize);
 
-    for (let i = 0; i < gridHeight; i++) {
-        grid.push([]);
+    resetGrid();
 
-        for (let j = 0; j < gridWidth; j++) {
-            grid[i].push(0);
-        }
-    }
-
-    particleType = 2;
-    spawnRandomParticles(1);
-    particleType = 0;
+    createOptions();
 
     frameRate(60);
-    createInput();
 }
 
 function draw() {
@@ -48,7 +46,7 @@ function draw() {
 
     drawParticles();
 
-    spawnRandomParticles(1);
+    addRain();
 
     if (mouseIsPressed) {
         let gridX = convertPixelsToGrid(mouseX);
@@ -74,6 +72,10 @@ function draw() {
     }
 
     // Draw UI
+    drawUI();
+}
+
+function drawUI() {
     fill(0, 0, 0);
     stroke(0, 0, 0);
     textFont('Arial');
@@ -83,9 +85,9 @@ function draw() {
     text("GravityGrid", 10, 30);
 
     textAlign(RIGHT);
-    text("Particle type: " + particleType, canvasWidth-10, 30);
-    text("Total particle count: " + particleCount, canvasWidth-10, 60);
-    text("Eraser size: " + brushSize, canvasWidth-10, 90);
+    text("Particle type: " + particleTypes[particleType], canvasWidth - 10, 30);
+    text("Total particle count: " + particleCount, canvasWidth - 10, 60);
+    text("Eraser size: " + brushSize, canvasWidth - 10, 90);
 }
 
 function keyPressed() {
@@ -101,7 +103,7 @@ function keyPressed() {
     else if (key == '3') {
         particleType = 3;
     }
-    else if (key == 'k') {
+    else if (key == ' ') {
         if (isLooping()) {
             noLoop();
         }
@@ -109,19 +111,12 @@ function keyPressed() {
             loop();
         }
     }
-    else if (key == 'l') {
+    else if (key == 'ArrowRight') {
         noLoop();
         draw();
     }
     else if (key == 'c') {
-        grid = [];
-        for (let i = 0; i < gridHeight; i++) {
-            grid.push([]);
-
-            for (let j = 0; j < gridWidth; j++) {
-                grid[i].push(0);
-            }
-        }
+        resetGrid();
     }
     else if (key == '=') {
         brushSize++;
@@ -134,6 +129,9 @@ function keyPressed() {
         if (brushSize < 1) {
             brushSize = 1;
         }
+    }
+    else if (key == 'r') {
+        raining = !raining;
     }
 }
 
@@ -179,35 +177,110 @@ function spawnRandomParticles(quantity) {
 function removeParticles(x, y, radius) {
     try {
         grid[y][x] = 0;
-    } catch {}
+    } catch { }
 
     for (i = 0; i < radius; i++) {
         try {
-            grid[y][x+i] = 0;
-        } catch {}
+            grid[y][x + i] = 0;
+        } catch { }
         try {
-            grid[y][x-i] = 0;
-        } catch {}
+            grid[y][x - i] = 0;
+        } catch { }
         try {
-            grid[y+i][x] = 0;
-        } catch {}
+            grid[y + i][x] = 0;
+        } catch { }
         try {
-            grid[y-i][x] = 0;
-        } catch {}
+            grid[y - i][x] = 0;
+        } catch { }
 
         for (j = 0; j < radius; j++) {
             try {
-                grid[y+i][x+j] = 0;
-            } catch {}
+                grid[y + i][x + j] = 0;
+            } catch { }
             try {
-                grid[y+i][x-j] = 0;
-            } catch {}
+                grid[y + i][x - j] = 0;
+            } catch { }
             try {
-                grid[y-i][x-j] = 0;
-            } catch {}
+                grid[y - i][x - j] = 0;
+            } catch { }
             try {
-                grid[y-i][x+j] = 0;
-            } catch {}
+                grid[y - i][x + j] = 0;
+            } catch { }
+        }
+    }
+}
+
+function addRain() {
+    if (raining) {
+        spawnRandomParticles(1);
+    }
+}
+
+function resetGrid() {
+    grid = [];
+
+    for (let i = 0; i < gridHeight; i++) {
+        grid.push([]);
+
+        for (let j = 0; j < gridWidth; j++) {
+            grid[i].push(0);
+        }
+    }
+}
+
+function createOptions() {
+    createP();
+    createButton('Sand').mousePressed(() => particleType = 1);
+    createButton('Water').mousePressed(() => particleType = 2);
+    createButton('Wall').mousePressed(() => particleType = 3);
+
+    createP();
+    createButton('Eraser').mousePressed(() => particleType = 0);
+    createButton('Increase erase size').mousePressed(() => brushSize++);
+    createButton('Decrease erase size').mousePressed(() => brushSize--);
+
+    createP();
+    createButton('Start/Stop').mousePressed(() => isLooping() ? noLoop() : loop());
+    createButton('Clear').mousePressed(() => resetGrid());
+    createButton('Toggle Rain').mousePressed(() => raining = !raining);
+
+    createP();
+    createButton('Save grid state').mouseClicked(() => saveStateFile());
+    createP('Load grid state:');
+    createFileInput(loadStateFile);
+
+    createP('Press <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd>, <kbd>0</kbd> to change particle type. Press <kbd>Space</kbd> to start/stop simulation. Press <kbd>Right Arrow</kbd> to step forward through the simulation.');
+
+    createP('Made and hosted by <a href="https://sooraj.dev/">Sooraj</a>.');
+}
+
+function saveStateFile() {
+    saveJSON(grid, 'GravityGrid Grid State.json');
+}
+
+function loadStateFile(file) {
+    resetGrid();
+
+    // Parse the file and load the grid
+    if (file.type === 'application') {
+        let data = file.data;
+
+        for (let i = 0; i < min(grid.length, data.length); i++) {
+            for (let j = 0; j < min(grid[i].length, data[i].length); j++) {
+                if (data[i][j] != 0) {
+                    let particle = data[i][j];
+
+                    if (particle.type == 'sand') {
+                        grid[i][j] = new Sand(j, i, particle['particleSpeed'], particle['particleAge'], particle['updated'], particle['color']);
+                    }
+                    else if (particle.type == 'water') {
+                        grid[i][j] = new Water(j, i, particle['particleSpeed'], particle['particleAge'], particle['updated'], particle['color'], particle['direction'], particle['reachedBottom']);
+                    }
+                    else if (particle.type == 'wall') {
+                        grid[i][j] = new Wall(j, i);
+                    }
+                }
+            }
         }
     }
 }

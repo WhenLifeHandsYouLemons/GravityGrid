@@ -1,23 +1,13 @@
-html,
-body {
+html, body {
     margin: 0;
     padding: 0;
+
     height: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
+
+    font-family: monospace;
 }
 
 canvas {
     display: block;
-}
-
-body {
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-
-    /* This centers our sketch horizontally. */
-    justify-content: center;
-
-    /* This centers our sketch vertically. */
-    align-items: center;
 }
